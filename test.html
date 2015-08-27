@@ -2,35 +2,48 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="200" height="100" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
+<canvas id="myCanvas" width="300" height="300" style="border:1px solid #d3d3d3;">
+Your browser does not support HTML5 canvas</canvas>
 
 <script>
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-ctx.beginPath();
-ctx.arc(95,50,40,0,2*Math.PI);
-ctx.fillStyle = "red";
-ctx.fill();
-ctx.stroke();
 
+var i = 150;
+var j = 150;
 
-var ctx1 = c.getContext("2d");ctx.beginPath();
-// poo();
-// // for (var i = 0; i < 200; i++){
-// // setTimeout(poo, 100 * i);
-// // }
-//
-// function poo {
-ctx1.arc(100,50,40,0,2*Math.PI);
-ctx1.fillStyle = "green";
-ctx1.fill();
-ctx1.stroke();
+function drawGrid(){
+  for (var i = 30; i < 300; i = i + 30){
+    ctx.moveTo(0,i);
+    ctx.lineTo(300,i);
+    ctx.stroke();
+    ctx.moveTo(i,0);
+    ctx.lineTo(i,300);
+    ctx.stroke();
+  }
+}
 
-setTimeout(function() {
-        var startTime = (new Date()).getTime();
-        animate(myRectangle, canvas, context, startTime);
-      }, 1000);
+function drawShakeyCircle(){
+  ctx.beginPath();
+  ctx.arc(i,j,40,0,2*Math.PI);
+  ctx.fillStyle = "green";
+  ctx.fill();
+  ctx.stroke();
+  if (j < 280){
+  j = j + (Math.random() - Math.random());
+  i = i + (Math.random() - Math.random());
+  }
+}
+
+function draw() {
+ctx.clearRect(0,0,300,300); // clear canvas
+drawGrid();
+drawShakeyCircle();
+
+window.requestAnimationFrame(draw);
+}
+
+window.requestAnimationFrame(draw);
 </script>
 
 </body>
