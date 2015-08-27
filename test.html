@@ -2,20 +2,17 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="300" height="300" style="border:1px solid #d3d3d3;">
+<canvas id="myCanvas" width="350" height="300" style="border:1px solid #d3d3d3;">
 Your browser does not support HTML5 canvas</canvas>
 
 <script>
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
-var i = 150;
-var j = 150;
-
 function drawGrid(){
-  for (var i = 30; i < 300; i = i + 30){
+  for (var i = 50; i < 350; i = i + 50){
     ctx.moveTo(0,i);
-    ctx.lineTo(300,i);
+    ctx.lineTo(350,i);
     ctx.stroke();
     ctx.moveTo(i,0);
     ctx.lineTo(i,300);
@@ -23,6 +20,8 @@ function drawGrid(){
   }
 }
 
+var i = 150;
+var j = 150;
 function drawShakeyCircle(){
   ctx.beginPath();
   ctx.arc(i,j,40,0,2*Math.PI);
@@ -35,15 +34,40 @@ function drawShakeyCircle(){
   }
 }
 
-function draw() {
-ctx.clearRect(0,0,300,300); // clear canvas
-drawGrid();
-drawShakeyCircle();
-
-window.requestAnimationFrame(draw);
+var z = 0;
+function dropCircle(){
+  ctx.beginPath();
+  ctx.arc(25,z,20,0,2*Math.PI);
+  ctx.fillStyle = "red";
+  ctx.fill();
+  ctx.stroke();
+  if (z < 275){
+    z++
+  } else {
+    z = 0;
+  }
+  //window.requestAnimationFrame(dropCircle);
 }
 
-window.requestAnimationFrame(draw);
+function draw() {
+  ctx.clearRect(0,0,350,300); // clear canvas
+  drawGrid();
+  drawShakeyCircle();
+
+  window.requestAnimationFrame(draw);
+}
+
+function animate(){
+  ctx.clearRect(0,0,350,300); // clear canvas
+  dropCircle();
+  drawGrid();
+
+  window.requestAnimationFrame(animate);
+}
+
+//window.requestAnimationFrame(draw);
+window.requestAnimationFrame(animate);
+//window.requestAnimationFrame(dropCircle);
 </script>
 
 </body>
