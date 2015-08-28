@@ -27,6 +27,8 @@
 
     function dropCircle(columnNumber) {
       //work out what yBottom should be
+      c.removeEventListener("click", onClick);
+
       var yBottom = 275;
       var row;
       var z = 0;
@@ -43,21 +45,22 @@
 
       function keepDropping(){
         ctx.clearRect(0, 0, 350, 300); //clear the canvas
-        ctx.clearRect(0, 0, 350, 300); //clear the canvas
         ctx.beginPath();
         ctx.arc(25+(columnNumber*50), z, 25, 0, 2 * Math.PI);
         ctx.fillStyle = "red";
         ctx.fill();
-        ctx.stroke();
+        //ctx.stroke();
 
         //need to set 275 number to ylower
         if (z < yBottom) {
-          z=z+2;
+          z=z+4;
           drawStatic();
           requestAnimationFrame(keepDropping);
         } else {
           gameState[columnNumber][row-1] = 1;
+          ctx.clearRect(0, 0, 350, 300); //clear the canvas
           redraw();
+          c.addEventListener("click", onClick);
           return;
         }
       }
@@ -96,18 +99,14 @@
       drawPlacedCircles();
     }
 
-    //requestAnimationFrame(draw);
-    //requestAnimationFrame(animate);
-    //requestAnimationFrame(dropCircle);
-
-    c.addEventListener("click", function(e) {
+    function onClick(e) {
       for (var i = 0; i < 8; i++) {
         if (e.clientX >= (i * 50) && e.clientX <= ((i + 1) * 50)) {
           dropCircle(i);
           redraw();
         }
       }
-    });
+    }
 
     function redraw() {
       ctx.clearRect(0, 0, 350, 300); //clear the canvas
@@ -115,6 +114,7 @@
       //checkForWin();
     }
 
+    c.addEventListener("click", onClick);
     drawStatic();
   </script>
 
