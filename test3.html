@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+  <canvas id="myCanvas" width="350" height="300" style="border:1px solid #d3d3d3;">
+    Your browser does not support HTML5 canvas</canvas>
+
+  <script>
+    // Cross-browser support for requestAnimationFrame
+    var w = window;
+    requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    var ctxStatic = c.getContext("2d");
+
+    var gameState = [
+      [1, 1, 1, 1, 1, 1],
+      [0, 1, 1, 1, 1, 1],
+      [0, 0, 1, 1, 1, 1],
+      [0, 0, 0, 1, 1, 1],
+      [0, 0, 0, 0, 1, 1],
+      [0, 0, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0]
+    ];
+
+    function dropCircle(columnNumber) {
+      //work out what yBottom should be
+      var yBottom = 275;
+      var row;
+      var z = 0;
+      if (gameState[columnNumber][0]){
+        alert("column already full!");
+        return;
+      }
+      for (row = 1; row < 6; row++){
+        if (gameState[columnNumber][row] == 1){
+          yBottom = 25 + (50 * (row-1));
+          break;
+        }
+      }
+
+      function keepDropping(){
+        ctx.clearRect(0, 0, 350, 300); //clear the canvas
+        ctx.clearRect(0, 0, 350, 300); //clear the canvas
+        ctx.beginPath();
+        ctx.arc(25+(columnNumber*50), z, 25, 0, 2 * Math.PI);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.stroke();
+
+        //need to set 275 number to ylower
+        if (z < yBottom) {
+          z=z+2;
+          drawStatic();
+          requestAnimationFrame(keepDropping);
+        } else {
+          gameState[columnNumber][row-1] = 1;
+          redraw();
+          return;
+        }
+      }
+
+      keepDropping();
+    }
+
+    function drawStatic() {
+
+      function drawGrid() {
+        for (var i = 0; i < 400; i = i + 50) {
+          ctxStatic.moveTo(0, i);
+          ctxStatic.lineTo(350, i);
+          ctxStatic.stroke();
+          ctxStatic.moveTo(i, 0);
+          ctxStatic.lineTo(i, 300);
+          ctxStatic.stroke();
+        }
+      }
+
+      function drawPlacedCircles() {
+        for (var x = 0; x < gameState.length; x++) {
+          for (var y = 0; y < gameState[x].length; y++) {
+            if (gameState[x][y] != 0) {
+              ctxStatic.beginPath();
+              ctxStatic.arc(25 + (x * 50), 25 + (y * 50), 25, 0, 2 * Math.PI);
+              ctxStatic.fillStyle = "green";
+              ctxStatic.fill();
+              ctxStatic.stroke();
+            }
+          }
+        }
+      }
+
+      drawGrid();
+      drawPlacedCircles();
+    }
+
+    //requestAnimationFrame(draw);
+    //requestAnimationFrame(animate);
+    //requestAnimationFrame(dropCircle);
+
+    c.addEventListener("click", function(e) {
+      for (var i = 0; i < 8; i++) {
+        if (e.clientX >= (i * 50) && e.clientX <= ((i + 1) * 50)) {
+          dropCircle(i);
+          redraw();
+        }
+      }
+    });
+
+    function redraw() {
+      ctx.clearRect(0, 0, 350, 300); //clear the canvas
+      drawStatic();
+      //checkForWin();
+    }
+
+    drawStatic();
+  </script>
+
+</body>
+
+</html>

@@ -6,33 +6,13 @@
 Your browser does not support HTML5 canvas</canvas>
 
 <script>
+// Cross-browser support for requestAnimationFrame
+var w = window;
+requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
-function drawGrid(){
-  for (var i = 50; i < 350; i = i + 50){
-    ctx.moveTo(0,i);
-    ctx.lineTo(350,i);
-    ctx.stroke();
-    ctx.moveTo(i,0);
-    ctx.lineTo(i,300);
-    ctx.stroke();
-  }
-}
-
-var i = 150;
-var j = 150;
-function drawShakeyCircle(){
-  ctx.beginPath();
-  ctx.arc(i,j,40,0,2*Math.PI);
-  ctx.fillStyle = "green";
-  ctx.fill();
-  ctx.stroke();
-  if (j < 280){
-  j = j + (Math.random() - Math.random());
-  i = i + (Math.random() - Math.random());
-  }
-}
 
 var z = 0;
 function dropCircle(){
@@ -46,7 +26,7 @@ function dropCircle(){
   } else {
     z = 0;
   }
-  //window.requestAnimationFrame(dropCircle);
+  //requestAnimationFrame(dropCircle);
 }
 
 function draw() {
@@ -54,20 +34,49 @@ function draw() {
   drawGrid();
   drawShakeyCircle();
 
-  window.requestAnimationFrame(draw);
+  requestAnimationFrame(draw);
 }
 
 function animate(){
   ctx.clearRect(0,0,350,300); // clear canvas
   dropCircle();
-  drawGrid();
+  drawStatic();
 
-  window.requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 }
 
-//window.requestAnimationFrame(draw);
-window.requestAnimationFrame(animate);
-//window.requestAnimationFrame(dropCircle);
+c.addEventListener("click",function(e){
+  for (var i = 0; i < 8; i++){
+    if (e.clientX >= (i*50) && e.clientX <= ((i+1)*50)){
+      alert(i+1);
+      //drop code here
+    }
+  }
+});
+
+//requestAnimationFrame(draw);
+requestAnimationFrame(animate);
+//requestAnimationFrame(dropCircle);
+function loop(){
+  ctx.clearRect(0,0,350,300); //clear the canvas
+  drawStatic();
+}
+
+function drawStatic(){
+
+  function drawGrid(){
+    for (var i = 0; i < 400; i = i + 50){
+      ctx.moveTo(0,i);
+      ctx.lineTo(350,i);
+      ctx.stroke();
+      ctx.moveTo(i,0);
+      ctx.lineTo(i,300);
+      ctx.stroke();
+    }
+  }
+  drawGrid();
+}
+
 </script>
 
 </body>
