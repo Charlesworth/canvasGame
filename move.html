@@ -13,57 +13,50 @@ requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
-
-var z = 0;
-function dropCircle(){
+var keyPressed = {};
+var x = 100;
+var y = 100;
+function drawCircle(){
   ctx.beginPath();
-  ctx.arc(25,z,20,0,2*Math.PI);
+  ctx.arc(x,y,20,0,2*Math.PI);
   ctx.fillStyle = "red";
   ctx.fill();
   ctx.stroke();
-  if (z < 275){
-    z++
-  } else {
-    z = 0;
-  }
-}
-
-function drawStatic(){
-
-  function drawGrid(){
-    for (var i = 0; i < 400; i = i + 50){
-      ctx.moveTo(0,i);
-      ctx.lineTo(350,i);
-      ctx.stroke();
-      ctx.moveTo(i,0);
-      ctx.lineTo(i,300);
-      ctx.stroke();
-    }
-  }
-  drawGrid();
 }
 
 function animate(){
   ctx.clearRect(0,0,350,300); // clear canvas
-  dropCircle();
-  drawStatic();
+  getPos();
+  drawCircle();
 
   requestAnimationFrame(animate);
 }
 
-c.addEventListener("click",function(e){
-  for (var i = 0; i < 8; i++){
-    if (e.clientX >= (i*50) && e.clientX <= ((i+1)*50)){
-      alert(i+1);
-    }
+function getPos(){
+  if (keyPressed["w"] == true) {
+    y--
   }
-});
+  if (keyPressed["d"] == true) {
+    x++
+  }
+  if (keyPressed["a"] == true) {
+    x--
+  }
+  if (keyPressed["s"] == true) {
+    y++
+  }
+}
 
-document.addEventListener("keydown",function(e){
-  if (e.key == "a"){
-    alert("pressed a");
-  }
+document.addEventListener('keydown', function(e) {
+   keyPressed[e.key] = true;
 }, false);
+document.addEventListener('keyup', function(e) {
+   keyPressed[e.key] = false;
+}, false);
+c.addEventListener('click', function(e) {
+  x = e.clientX;
+  y = e.clientY;
+});
 
 requestAnimationFrame(animate);
 
