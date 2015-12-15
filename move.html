@@ -14,11 +14,11 @@ var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
 var keyPressed = {};
-var x = 100;
-var y = 100;
+var playerX = 100;
+var playerY = 100;
 function drawCircle(){
   ctx.beginPath();
-  ctx.arc(x,y,20,0,2*Math.PI);
+  ctx.arc(playerX,playerY,20,0,2*Math.PI);
   ctx.fillStyle = "red";
   ctx.fill();
   ctx.stroke();
@@ -26,25 +26,17 @@ function drawCircle(){
 
 function animate(){
   ctx.clearRect(0,0,350,300); // clear canvas
-  getPos();
+  setUserPosition();
   drawCircle();
 
   requestAnimationFrame(animate);
 }
 
-function getPos(){
-  if (keyPressed["w"] == true) {
-    y--
-  }
-  if (keyPressed["d"] == true) {
-    x++
-  }
-  if (keyPressed["a"] == true) {
-    x--
-  }
-  if (keyPressed["s"] == true) {
-    y++
-  }
+function setUserPosition(){
+  if (keyPressed["s"] || keyPressed["ArrowDown"])  { playerY++ }
+  if (keyPressed["w"] || keyPressed["ArrowUp"])    { playerY-- }
+  if (keyPressed["d"] || keyPressed["ArrowRight"]) { playerX++ }
+  if (keyPressed["a"] || keyPressed["ArrowLeft"])  { playerX-- }
 }
 
 document.addEventListener('keydown', function(e) {
@@ -54,8 +46,8 @@ document.addEventListener('keyup', function(e) {
    keyPressed[e.key] = false;
 }, false);
 c.addEventListener('click', function(e) {
-  x = e.clientX;
-  y = e.clientY;
+  playerX = e.clientX;
+  playerY = e.clientY;
 });
 
 requestAnimationFrame(animate);
