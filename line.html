@@ -17,12 +17,19 @@ var keyPressed = {};
 var playerX = 100;
 var playerY = 100;
 function drawCircle(){
-  ctx.beginPath();
+  //ctx.beginPath();
   //ctx.arc(playerX,playerY,20,0,2*Math.PI);
-  ctx.rect(playerX, playerY, 20, 20)
-  ctx.fillStyle = "red";
-  ctx.fill();
-  ctx.stroke();
+  //ctx.rect(playerX, playerY, 20, 20)
+  //ctx.fillStyle = "red";
+  //ctx.fill();
+  // ctx.moveto(20, 20);
+  // ctx.lineTo(playerX, playerY);
+  // ctx.stroke();
+
+  ctx.beginPath();
+    ctx.moveTo(125,125);
+    ctx.lineTo(playerX,playerY);
+    ctx.stroke();
 }
 
 function animate(){
