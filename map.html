@@ -13,6 +13,9 @@ requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
+var img = new Image();   // Create new img element
+img.src = 'map.gif'; // Set source path
+
 var hoverZones = [
   {x:100, y:100, link:"www.google.com"},
   {x:10, y:10, link:"www.google.com"},
@@ -24,6 +27,8 @@ var mX = 100;
 var mY = 100;
 
 function drawCircle(){
+  ctx.drawImage(img,0,0);
+
   var index;
   for (index = 0; index < hoverZones.length; ++index) {
     var zone = hoverZones[index];
