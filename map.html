@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="350" height="300" style="border:1px solid #d3d3d3;">
+Your browser does not support HTML5 canvas</canvas>
+
+<script>
+// Cross-browser support for requestAnimationFrame
+var w = window;
+requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+var hoverZones = [
+  {x:100, y:100, link:"www.google.com"},
+  {x:10, y:10, link:"www.google.com"},
+  {x:50, y:50, link:"www.google.com"},
+];
+
+var keyPressed = {};
+var mX = 100;
+var mY = 100;
+
+function drawCircle(){
+  var index;
+  for (index = 0; index < hoverZones.length; ++index) {
+    var zone = hoverZones[index];
+
+    ctx.beginPath();
+    ctx.arc(zone.x,zone.y,5,0,2*Math.PI);
+    ctx.fillStyle = "grey";
+    ctx.fill();
+    ctx.stroke();
+
+    //check if mouse is in the circle
+    if ((mX < zone.x+10) && (mX > zone.x-10) && (mY < zone.y+10) && (mY > zone.y-10)) {
+      ctx.beginPath();
+      ctx.arc(zone.x,zone.y,12,0,2*Math.PI);
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.stroke();
+    }
+  }
+
+  // ctx.beginPath();
+  //   ctx.moveTo(125,125);
+  //   ctx.lineTo(mX,mY);
+  //   ctx.stroke();
+}
+
+function animate(){
+  ctx.clearRect(0,0,350,300); // clear canvas
+  drawCircle();
+
+  requestAnimationFrame(animate);
+}
+
+c.addEventListener('mousemove', function(e) {
+  mX = e.clientX;
+  mY = e.clientY;
+});
+c.addEventListener('click', function(e) {
+  var str = mX + " and " + mY
+  alert(str);
+
+  var index;
+  for (index = 0; index < hoverZones.length; ++index) {
+    var zone = hoverZones[index];
+
+    //check if mouse is in the a zone
+    if ((e.clientX < zone.x+10) && (e.clientX > zone.x-10) && (e.clientY < zone.y+10) && (e.clientY > zone.y-10)) {
+      window.location="http://www.google.com"
+    }
+  }
+
+});
+
+//console.log("hi");
+requestAnimationFrame(animate);
+
+</script>
+
+</body>
+</html>
